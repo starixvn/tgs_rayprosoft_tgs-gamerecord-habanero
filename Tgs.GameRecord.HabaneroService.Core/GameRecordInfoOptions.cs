@@ -4,7 +4,7 @@ public record GameRecordInfoOptions
 {
     public string GameProviderCode { get; set; } = default!;
 
-    public double MaxIntervalMinute { get; set; } = 30d;
+    //public double MaxIntervalMinute { get; set; } = 30d;
     public double MinIntervalMinute { get; set; } = 1d;
 
     public double IntervalMinute { get; set; } = 5d;
