@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json.schemastore.org/launchsettings.json",
+  "iisSettings": {
+    "windowsAuthentication": false,
+    "anonymousAuthentication": true,
+    "iisExpress": {
+      "applicationUrl": "http://localhost:58992",
+      "sslPort": 44388
+    }
+  },
+  "profiles": {
+    "Tgs.GameRecord.HabaneroService": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "launchUrl": "swagger",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "OTEL_SERVICE_NAME": "Game-Gamerecord-Habanero-Service(local)",
+        "NODE_IP": "otel.rpgp.cc"
+      },
+      "applicationUrl": "https://localhost:7269;http://localhost:5269",
+      "dotnetRunMessages": true
+    },
+    "Docker": {
+      "commandName": "Docker",
+      "launchBrowser": true,
+      "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}/swagger",
+      "publishAllPorts": true,
+      "useSSL": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "OTEL_SERVICE_NAME": "Game-Gamerecord-Habanero-Service(local)",
+        "NODE_IP": "otel.rpgp.cc"
+      }
+    }
+  }
+
+}
