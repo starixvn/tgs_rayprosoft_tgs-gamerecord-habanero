@@ -1,16 +1,16 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "game-gamerecord-bti-manualservice.fullname" . }}
+  name: {{ include "game-gamerecord-habanero-manualservice.fullname" . }}
   labels:
-    {{- include "game-gamerecord-bti-manualservice.labels" . | nindent 4 }}
+    {{- include "game-gamerecord-habanero-manualservice.labels" . | nindent 4 }}
 spec:
   {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}
   {{- end }}
   selector:
     matchLabels:
-      {{- include "game-gamerecord-bti-manualservice.selectorLabels" . | nindent 6 }}
+      {{- include "game-gamerecord-habanero-manualservice.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       {{- with .Values.podAnnotations }}
@@ -18,13 +18,13 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
-        {{- include "game-gamerecord-bti-manualservice.selectorLabels" . | nindent 8 }}
+        {{- include "game-gamerecord-habanero-manualservice.selectorLabels" . | nindent 8 }}
     spec:
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      serviceAccountName: {{ include "game-gamerecord-bti-manualservice.serviceAccountName" . }}
+      serviceAccountName: {{ include "game-gamerecord-habanero-manualservice.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
@@ -35,7 +35,7 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           env:
             - name: OTEL_SERVICE_NAME
-              value: Game-Gamerecord-BTi-ManualService({{ .Release.Namespace }})
+              value: Game-Gamerecord-Habanero-ManualService({{ .Release.Namespace }})
             - name: NODE_IP
               valueFrom:
                 fieldRef:
@@ -118,7 +118,7 @@ spec:
       volumes:
         - name: appsettings
           configMap:
-            name: configmap-{{ include "game-gamerecord-bti-manualservice.fullname" . }}
+            name: configmap-{{ include "game-gamerecord-habanero-manualservice.fullname" . }}
         - name: rds-combined-ca-bundle
           secret:
             secretName: rds-combined-ca-bundle

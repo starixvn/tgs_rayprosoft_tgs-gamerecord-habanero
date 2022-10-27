@@ -1,28 +1,27 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: configmap-{{ include "game-gamerecord-bti-manualservice.name" . }}
-  namespace: {{ .Values.namespace }}
+  name: configmap-{{ include "game-gamerecord-habanero-manualservice.name" . }}
+  namespace: {{ .Release.Namespace }}
 data:
   appsettings.json: |
     {
       "GameRecordInfo": {
-        "GameProviderCode": "BTI",
+        "GameProviderCode": "HABATF",
         "MinIntervalMinute": 5,
         "MaxIntervalMinute": 30,
         "IntervalMinute": 15,
         "LockMinute": 14,
         "MongoDefine":  "gp.gamerecord.database.manual",
-        "MongoGlobPattern": "tgs.gp.gamerecord.database.manual.bti",
-        "GameExternalId": "sports_book"
+        "MongoGlobPattern": "tgs.gp.gamerecord.database.manual.habanero"        
       },
       "NatsSetting": {
         "Queue": "gp.gamerecord.manual",
-        "Subject": "gp.gamerecord.manual.bti"
+        "Subject": "gp.gamerecord.manual.habanero"
       },
       "GameRecord": {
          "GameProvidersQueryServerBaseUrl": "http://game-gameprovider-queryserver/",
-         "GameInterfaceBaseUrl": "http://game-gameinterface-bti-service:9090/"
+         "GameInterfaceBaseUrl": "http://game-gameinterface-habanero-service:9090/"
       }
     }
   monitor.settings.json: |

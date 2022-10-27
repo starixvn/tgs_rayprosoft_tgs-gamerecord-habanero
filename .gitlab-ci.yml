@@ -1,12 +1,12 @@
 variables:
-  ImageServiceName: pgtgs/game-gamerecord-bti-service
-  SettingServiceKey: game-gamerecord-bti-service
-  HelmTemplateFolderServiceName: game-gamerecord-bti-service
+  ImageServiceName: pgtgs/game-gamerecord-habanero-service
+  SettingServiceKey: game-gamerecord-habanero-service
+  HelmTemplateFolderServiceName: game-gamerecord-habanero-service
 
-  ImageManualName: pgtgs/game-gamerecord-bti-manualservice
-  SettingManualKey: game-gamerecord-bti-manualservice
-  HelmTemplateFolderManualName: game-gamerecord-bti-manualservice
-  BuildCacheKey: Tgs.GameRecord.BTiService.$CI_PIPELINE_ID
+  ImageManualName: pgtgs/game-gamerecord-habanero-manualservice
+  SettingManualKey: game-gamerecord-habanero-manualservice
+  HelmTemplateFolderManualName: game-gamerecord-habanero-manualservice
+  BuildCacheKey: Tgs.GameRecord.HabaneroService.$CI_PIPELINE_ID
 
 default:
   before_script:
@@ -63,9 +63,9 @@ push-docker-image:
     untracked: true   
     policy: pull
   script:
-    - dotnet build "Tgs.GameRecord.BTiService/Tgs.GameRecord.BTiService.csproj" -c $BuildConfiguration -t:ContainerBuild -p:DockerfileTag="$ImageServiceName:$Tag" --no-restore
+    - dotnet build "Tgs.GameRecord.HabaneroService/Tgs.GameRecord.HabaneroService.csproj" -c $BuildConfiguration -t:ContainerBuild -p:DockerfileTag="$ImageServiceName:$Tag" --no-restore
     - docker push $ImageServiceName:$Tag
-    - dotnet build "Tgs.GameRecord.BTiManualService/Tgs.GameRecord.BTiManualService.csproj" -c $BuildConfiguration -t:ContainerBuild -p:DockerfileTag="$ImageManualName:$Tag" --no-restore
+    - dotnet build "Tgs.GameRecord.HabaneroManualService/Tgs.GameRecord.HabaneroManualService.csproj" -c $BuildConfiguration -t:ContainerBuild -p:DockerfileTag="$ImageManualName:$Tag" --no-restore
     - docker push $ImageManualName:$Tag
 
 

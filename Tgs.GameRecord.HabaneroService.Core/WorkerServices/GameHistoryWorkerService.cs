@@ -26,35 +26,27 @@ internal class GameHistoryWorkerService : ICommandService<GameHistoryWorkerComma
     {
         try
         {
-            while (true)
-            {
-                var gameHistorySettleds = await _client
-                        .GameHistorySettledAsync(
-                            apiUrl: command.ApiUrl,
-                            brandId: command.BrandId,
-                            apiKey: command.ApiKey,
-                            startTime: command.StartTime.ToUniversalTime(),
-                            endTime: command.EndTime.ToUniversalTime(),
-                            cancellationToken: cancellationToken)
-                        .ToArrayAsync(cancellationToken: cancellationToken)
-                        .ConfigureAwait(false);
-
-                _logger.LogInformation("LogOn:{logOn} | Action:GameHistorySettledAsync | Response:{response}",
-                    DateTime.UtcNow.ToString("O"),
-                    JsonSerializer.Serialize(gameHistorySettleds));
-
-                if (!gameHistorySettleds.Any())
-                {
-                    break;
-                }
-
-                await _settledService
-                    .ExecuteAsync(
-                        command: new GamePullRecordSettledCommand(
-                            Records: gameHistorySettleds),
+            var gameHistorySettleds = await _client
+                    .GameHistorySettledAsync(
+                        apiUrl: command.ApiUrl,
+                        brandId: command.BrandId,
+                        apiKey: command.ApiKey,
+                        startTime: command.StartTime.ToUniversalTime(),
+                        endTime: command.EndTime.ToUniversalTime(),
                         cancellationToken: cancellationToken)
+                    .ToArrayAsync(cancellationToken: cancellationToken)
                     .ConfigureAwait(false);
-            }
+
+            _logger.LogInformation("LogOn:{logOn} | Action:GameHistorySettledAsync | Response:{response}",
+                DateTime.UtcNow.ToString("O"),
+                JsonSerializer.Serialize(gameHistorySettleds));
+
+            await _settledService
+                .ExecuteAsync(
+                    command: new GamePullRecordSettledCommand(
+                        Records: gameHistorySettleds),
+                    cancellationToken: cancellationToken)
+                .ConfigureAwait(false);
         }
         catch (Exception ex)
         {

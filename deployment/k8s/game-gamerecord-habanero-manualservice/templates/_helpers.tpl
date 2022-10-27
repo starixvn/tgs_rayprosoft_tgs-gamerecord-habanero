@@ -1,7 +1,7 @@
 {{/*
 Expand the name of the chart.
 */}}
-{{- define "game-gamerecord-bti-manualservice.name" -}}
+{{- define "game-gamerecord-habanero-manualservice.name" -}}
 {{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
@@ -10,7 +10,7 @@ Create a default fully qualified app name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 If release name contains chart name it will be used as a full name.
 */}}
-{{- define "game-gamerecord-bti-manualservice.fullname" -}}
+{{- define "game-gamerecord-habanero-manualservice.fullname" -}}
 {{- if .Values.fullnameOverride }}
 {{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" }}
 {{- else }}
@@ -26,16 +26,16 @@ If release name contains chart name it will be used as a full name.
 {{/*
 Create chart name and version as used by the chart label.
 */}}
-{{- define "game-gamerecord-bti-manualservice.chart" -}}
+{{- define "game-gamerecord-habanero-manualservice.chart" -}}
 {{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
 {{/*
 Common labels
 */}}
-{{- define "game-gamerecord-bti-manualservice.labels" -}}
-helm.sh/chart: {{ include "game-gamerecord-bti-manualservice.chart" . }}
-{{ include "game-gamerecord-bti-manualservice.selectorLabels" . }}
+{{- define "game-gamerecord-habanero-manualservice.labels" -}}
+helm.sh/chart: {{ include "game-gamerecord-habanero-manualservice.chart" . }}
+{{ include "game-gamerecord-habanero-manualservice.selectorLabels" . }}
 {{- if .Chart.AppVersion }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
@@ -45,21 +45,21 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{/*
 Selector labels
 */}}
-{{- define "game-gamerecord-bti-manualservice.selectorLabels" -}}
-app.kubernetes.io/name: {{ include "game-gamerecord-bti-manualservice.name" . }}
+{{- define "game-gamerecord-habanero-manualservice.selectorLabels" -}}
+app.kubernetes.io/name: {{ include "game-gamerecord-habanero-manualservice.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
-app: {{ include "game-gamerecord-bti-manualservice.name" . }}
+app: {{ include "game-gamerecord-habanero-manualservice.name" . }}
 tgs.kind: game
 tgs.game.kind: gamerecord
-tgs.gameprovider.kind: bti
+tgs.gameprovider.kind: habanero
 {{- end }}
 
 {{/*
 Create the name of the service account to use
 */}}
-{{- define "game-gamerecord-bti-manualservice.serviceAccountName" -}}
+{{- define "game-gamerecord-habanero-manualservice.serviceAccountName" -}}
 {{- if .Values.serviceAccount.create }}
-{{- default (include "game-gamerecord-bti-manualservice.fullname" .) .Values.serviceAccount.name }}
+{{- default (include "game-gamerecord-habanero-manualservice.fullname" .) .Values.serviceAccount.name }}
 {{- else }}
 {{- default "default" .Values.serviceAccount.name }}
 {{- end }}
