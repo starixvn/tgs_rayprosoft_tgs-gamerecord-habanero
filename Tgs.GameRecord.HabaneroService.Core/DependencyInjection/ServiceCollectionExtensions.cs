@@ -11,7 +11,7 @@ public static class ServiceCollectionExtensions
         this IServiceCollection services,
         Action<RedisOptions, IServiceProvider> redisDBconfigure,
         Action<GameRecordInfoOptions, IServiceProvider> gameRecordInfoOptions,
-        Action<GameInterfaceHabaneroClientOptions, IServiceProvider> gameInterfaceBTiClientOptions,
+        Action<GameInterfaceHabaneroClientOptions, IServiceProvider> gameInterfaceHabaneroClientOptions,
         Action<GameProvidersQueryServerClientOptions, IServiceProvider> gameProvidersQueryServerClientOptions)
         => services
             .AddOptions<RedisOptions>()
@@ -25,7 +25,7 @@ public static class ServiceCollectionExtensions
             .RegisterAllServiceUtilityTypes(
                 Assembly.GetExecutingAssembly(),
                 ServiceLifetime.Transient)
-            .AddGameInterfaceHabaneroServiceClient(gameInterfaceBTiClientOptions)
+            .AddGameInterfaceHabaneroServiceClient(gameInterfaceHabaneroClientOptions)
             .AddGameProvidersQueryServerClient(gameProvidersQueryServerClientOptions)
             .AddTransient<IScheduleDispatch>(sp => ActivatorUtilities.CreateInstance<ScheduleDispatch>(sp, sp.GetRequiredService<RedisConnectionManager>().Database))
             .AddTransient<IUtensil, UtensilRepository>()
