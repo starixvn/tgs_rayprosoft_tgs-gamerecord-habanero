@@ -39,14 +39,17 @@ internal class UtensilMemoryCacheRepository : IUtensil
         return gameProviderConfigurationId;
     }
 
-    public async ValueTask<int> GetGameIdAsync(Guid gameProviderId, string gameExternalId)
+    public async ValueTask<int?> GetGameIdAsync(Guid gameProviderId, string gameExternalId)
     {
         var key = $"{_gameRecordInfo.GameProviderCode}:{gameExternalId}";
-        if (!_memoryCache.TryGetValue(key, out int gameId))
+        if (!_memoryCache.TryGetValue(key, out int? gameId))
         {
             gameId = await _utensil.GetGameIdAsync(gameProviderId, gameExternalId).ConfigureAwait(false);
 
-            _ = _memoryCache.Set(key, gameId);
+            if (gameId.HasValue)
+            {
+                _ = _memoryCache.Set(key, gameId);
+            }
         }
         return gameId;
     }

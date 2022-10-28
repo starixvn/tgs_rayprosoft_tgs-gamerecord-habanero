@@ -31,7 +31,7 @@ internal class GamePullRecordSettledCommandService : ICommandService<GamePullRec
     public async ValueTask ExecuteAsync(GamePullRecordSettledCommand command, CancellationToken cancellationToken = default)
     {
         var gameProviderId = await _utensil.GetGameProviderIdAsync().ConfigureAwait(false);
-        var gameId = await _utensil.GetGameIdAsync(gameProviderId, _gameRecordInfo.GameExternalId).ConfigureAwait(false);
+
         foreach (var record in command.Records)
         {
             bool success = true;
@@ -52,14 +52,22 @@ internal class GamePullRecordSettledCommandService : ICommandService<GamePullRec
                 }
             }
 
+            var gameId = await _utensil.GetGameIdAsync(gameProviderId, record.ExternalGameId).ConfigureAwait(false);
+
+            if (playerModel is null || !gameId.HasValue)
+            {
+                success = false;
+            }
+
+
             GameRoundClientStatus clientStatus = GetGameRoundClientStatus(record);
 
             var data = new GameRecordMessage(
                 ExternalRoundId: record.ExternalRoundId,
                 GameProviderId: gameProviderId,
                 GameProviderCode: _gameRecordInfo.GameProviderCode,
-                GameId: gameId,
-                ExternalGameId: _gameRecordInfo.GameExternalId,
+                GameId: gameId ?? -1,
+                ExternalGameId: record.ExternalGameId,
                 PlayerCode: (playerModel == null) ? string.Empty : playerModel.PlayerCode,
                 CurrencyCode: (playerModel == null) ? string.Empty : playerModel.DefaultWalletCurrencyCode,
                 WalletId: (playerModel == null) ? Guid.Empty : playerModel.DefaultWalletId,

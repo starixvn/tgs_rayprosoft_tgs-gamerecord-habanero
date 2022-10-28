@@ -29,7 +29,7 @@ public class HabaneroController : ControllerBase
     ///         }
     /// </remarks>
     [HttpPost]
-    public ValueTask GameHistoryBySportsBookAsync(
+    public ValueTask GameHistoryAsync(
             [FromServices] ICommandService<GameHistoryWorkerCommand> service,
             GameRecordQueryViewModel model)
             => service.ExecuteAsync(new GameHistoryWorkerCommand(

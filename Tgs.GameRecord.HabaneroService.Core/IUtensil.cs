@@ -6,7 +6,7 @@ public interface IUtensil
 {
     ValueTask<Guid?> BrandGetGameProviderConfigurationIdAsync(Guid brandId, Guid gameProviderId);
 
-    ValueTask<int> GetGameIdAsync(Guid gameProviderId, string gameExternalId);
+    ValueTask<int?> GetGameIdAsync(Guid gameProviderId, string gameExternalId);
 
     ValueTask<Guid> GetGameProviderIdAsync();
 

@@ -13,11 +13,6 @@ public static class GameRecordRegisterExtensions
             var gameRecordInfo = app.Configuration.GetSection("GameRecordInfo").Get<GameRecordInfoOptions>();
             var utensil = scope.ServiceProvider.GetRequiredService<IUtensil>();
             var gameProviderId = await utensil.GetGameProviderIdAsync().ConfigureAwait(false);
-            _ = await utensil
-                    .GetGameIdAsync(
-                        gameProviderId,
-                        gameRecordInfo.GameExternalId)
-                    .ConfigureAwait(false);
         }
 
         return app;
