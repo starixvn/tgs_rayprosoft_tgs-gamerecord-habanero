@@ -20,10 +20,10 @@ internal class UtensilRepository : IUtensil
     public ValueTask<Guid?> BrandGetGameProviderConfigurationIdAsync(Guid brandId, Guid gameProviderId)
         => _client.BrandGetGameProviderConfigurationIdAsync(brandId, gameProviderId);
 
-    public async ValueTask<int> GetGameIdAsync(Guid gameProviderId, string gameExternalId)
+    public async ValueTask<int?> GetGameIdAsync(Guid gameProviderId, string gameExternalId)
     {
         var gameModel = await _client.GameGetAsync(gameProviderId, gameExternalId).ConfigureAwait(false);
-        return gameModel?.GameId ?? throw new Exception($"The identifier for this game does not exist.({gameExternalId})");
+        return gameModel?.GameId;
     }
 
     public async ValueTask<Guid> GetGameProviderIdAsync()

@@ -12,6 +12,4 @@ public record GameRecordInfoOptions
     public string MongoDefine { get; set; } = default!;
 
     public string MongoGlobPattern { get; set; } = default!;
-
-    public string GameExternalId { get; set; } = default!;
 }
