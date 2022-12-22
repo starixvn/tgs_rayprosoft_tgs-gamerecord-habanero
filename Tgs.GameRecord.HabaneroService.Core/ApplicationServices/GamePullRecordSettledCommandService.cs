@@ -11,8 +11,8 @@ namespace Tgs.GameRecord.HabaneroService.Core.ApplicationServices;
 
 internal class GamePullRecordSettledCommandService : ICommandService<GamePullRecordSettledCommand>
 {
-    private readonly ILogger<GamePullRecordSettledCommandService> _logger;
     private readonly GameRecordInfoOptions _gameRecordInfo;
+    private readonly ILogger<GamePullRecordSettledCommandService> _logger;
     private readonly IMessageSender _messageSender;
     private readonly IUtensil _utensil;
 
@@ -59,7 +59,6 @@ internal class GamePullRecordSettledCommandService : ICommandService<GamePullRec
                 success = false;
             }
 
-
             GameRoundClientStatus clientStatus = GetGameRoundClientStatus(record);
 
             var data = new GameRecordMessage(
@@ -100,16 +99,11 @@ internal class GamePullRecordSettledCommandService : ICommandService<GamePullRec
     }
 
     private static GameRoundClientStatus GetGameRoundClientStatus(GameHistorySettled record)
-    {
-        if (record.GameStateId is 4)
-            return GameRoundClientStatus.Void;
-
-        if (record.PlayerWinLoss < 0)
-            return GameRoundClientStatus.Loss;
-
-        if (record.PlayerWinLoss > 0)
-            return GameRoundClientStatus.Win;
-
-        return GameRoundClientStatus.Draw;
-    }
+        => record.GameStateId is 4
+            ? GameRoundClientStatus.Void
+            : record.PlayerWinLoss < 0
+            ? GameRoundClientStatus.Loss
+            : record.PlayerWinLoss > 0
+            ? GameRoundClientStatus.Win
+            : GameRoundClientStatus.Draw;
 }

@@ -47,10 +47,10 @@ Selector labels
 */}}
 {{- define "game-gamerecord-habanero-manualservice.selectorLabels" -}}
 app.kubernetes.io/name: {{ include "game-gamerecord-habanero-manualservice.name" . }}
-app.kubernetes.io/instance: {{ .Release.Name }}
 app: {{ include "game-gamerecord-habanero-manualservice.name" . }}
 tgs.kind: game
 tgs.game.kind: gamerecord
+tgs.gamerecord.kind: manualservice
 tgs.gameprovider.kind: habanero
 {{- end }}
 
