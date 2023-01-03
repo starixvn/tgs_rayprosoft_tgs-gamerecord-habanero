@@ -1,6 +1,6 @@
 ﻿using System.Reflection;
+using Tgs.GameCommand.Client;
 using Tgs.GameInterface.HabaneroService.Client;
-using Tgs.GameProviders.QueryServer.Client;
 using Tgs.GameRecord.HabaneroService.Core;
 
 namespace Microsoft.Extensions.DependencyInjection;
@@ -12,7 +12,7 @@ public static class ServiceCollectionExtensions
         Action<RedisOptions, IServiceProvider> redisDBconfigure,
         Action<GameRecordInfoOptions, IServiceProvider> gameRecordInfoOptions,
         Action<GameInterfaceHabaneroClientOptions, IServiceProvider> gameInterfaceHabaneroClientOptions,
-        Action<GameProvidersQueryServerClientOptions, IServiceProvider> gameProvidersQueryServerClientOptions)
+        Action<GameCommandClientOptions, IServiceProvider> gameCommandClientOptions)
         => services
             .AddOptions<RedisOptions>()
             .Configure(redisDBconfigure)
@@ -26,7 +26,7 @@ public static class ServiceCollectionExtensions
                 Assembly.GetExecutingAssembly(),
                 ServiceLifetime.Transient)
             .AddGameInterfaceHabaneroServiceClient(gameInterfaceHabaneroClientOptions)
-            .AddGameProvidersQueryServerClient(gameProvidersQueryServerClientOptions)
+            .AddGameCommandClient(gameCommandClientOptions)
             .AddTransient<IScheduleDispatch>(sp => ActivatorUtilities.CreateInstance<ScheduleDispatch>(sp, sp.GetRequiredService<RedisConnectionManager>().Database))
             .AddTransient<IUtensil, UtensilRepository>()
             .Decorate<IUtensil>((innerRepository, sp) => ActivatorUtilities.CreateInstance<UtensilMemoryCacheRepository>(sp, innerRepository, TimeSpan.FromHours(1)));

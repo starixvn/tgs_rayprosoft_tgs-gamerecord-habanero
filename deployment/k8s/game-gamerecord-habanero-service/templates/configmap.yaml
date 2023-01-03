@@ -19,7 +19,7 @@ data:
         "Subject": "gp.gamerecord.schedule.habatf"
       },
       "GameRecord": {
-         "GameProvidersQueryServerBaseUrl": "http://game-gameprovider-queryserver/",
+         "GameCommandClientBaseUrl": "http://game-gamecommand/",
          "GameInterfaceBaseUrl": "http://game-gameinterface-habanero-service:9090/"
       }
     }
