@@ -8,7 +8,7 @@ data:
     {
       "GameRecordInfo": {
         "GameProviderCode": "HABATF",
-        "MinIntervalMinute": 1,        
+        "MinimumIntervalMinute": 1,        
         "IntervalMinute": 3,
         "LockMinute": 2
       },
