@@ -14,16 +14,19 @@ internal class GamePullRecordSettledCommandService : ICommandService<GamePullRec
     private readonly GameRecordInfoOptions _gameRecordInfo;
     private readonly ILogger<GamePullRecordSettledCommandService> _logger;
     private readonly IMessageSender _messageSender;
+    private readonly MongoSettingOptions _mongoSetting;
     private readonly IUtensil _utensil;
 
     public GamePullRecordSettledCommandService(
         ILogger<GamePullRecordSettledCommandService> logger,
-        IOptions<GameRecordInfoOptions> options,
+        IOptions<GameRecordInfoOptions> gameRecordInfoOptions,
+        IOptions<MongoSettingOptions> mongoSettingOptions,
         IMessageSender messageSender,
         IUtensil utensil)
     {
+        _gameRecordInfo = gameRecordInfoOptions.Value;
+        _mongoSetting = mongoSettingOptions.Value;
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        _gameRecordInfo = options.Value;
         _messageSender = messageSender ?? throw new ArgumentNullException(nameof(messageSender));
         _utensil = utensil ?? throw new ArgumentNullException(nameof(utensil));
     }
@@ -53,7 +56,7 @@ internal class GamePullRecordSettledCommandService : ICommandService<GamePullRec
             if (playerModel != null)
             {
                 gameProviderConfigurationId = await _utensil
-                    .BrandGetGameProviderConfigurationIdAsync(
+                    .GetBrandGameProviderConfigurationIdAsync(
                         brandId: playerModel.BrandId,
                         gameProviderId: gameProviderId,
                         cancellationToken: cancellationToken)
@@ -78,7 +81,7 @@ internal class GamePullRecordSettledCommandService : ICommandService<GamePullRec
 
             GameRoundClientStatus clientStatus = GetGameRoundClientStatus(record);
 
-            var data = new GameRecordMessage(
+            var message = new GameRecordMessage(
                 ExternalRoundId: record.ExternalRoundId,
                 GameProviderId: gameProviderId,
                 GameProviderCode: _gameRecordInfo.GameProviderCode,
@@ -102,16 +105,17 @@ internal class GamePullRecordSettledCommandService : ICommandService<GamePullRec
                 AdditionalData: string.Empty,
                 Success: success);
 
-            var subject = _gameRecordInfo.MongoGlobPattern;
-
-            _logger.LogInformation("LogOn:{logOn}  Subject:{subject} MessageRequest:{request}", DateTime.Now.ToString("o"), subject, data);
+            _logger.LogInformation("LogOn:{logOn}  Subject:{subject} MessageRequest:{message}",
+                DateTime.Now.ToString("o"),
+                _mongoSetting.GlobPattern,
+                message);
 
             await _messageSender
-                    .PublishAsync(
-                        subject: subject,
-                        data: data.ToBson(),
-                        cancellationToken: cancellationToken)
-                    .ConfigureAwait(false);
+                .PublishAsync(
+                    subject: _mongoSetting.GlobPattern,
+                    data: message.ToBson(),
+                    cancellationToken: cancellationToken)
+                .ConfigureAwait(false);
         }
     }
 

@@ -10,13 +10,7 @@ data:
         "GameProviderCode": "HABATF",
         "MinIntervalMinute": 1,        
         "IntervalMinute": 3,
-        "LockMinute": 2,
-        "MongoDefine":  "gp.gamerecord.database.manual",
-        "MongoGlobPattern": "tgs.gp.gamerecord.database.manual.habatf"        
-      },
-      "NatsSetting": {
-        "Queue": "gp.gamerecord.manual",
-        "Subject": "gp.gamerecord.manual.habatf"
+        "LockMinute": 2    
       },
       "GameRecord": {
          "GameCommandClientBaseUrl": "http://game-gamecommand/",
