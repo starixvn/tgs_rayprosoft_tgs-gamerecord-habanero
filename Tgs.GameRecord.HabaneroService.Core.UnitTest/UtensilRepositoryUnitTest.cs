@@ -15,8 +15,9 @@ public class UtensilRepositoryUnitTest
         var gameRecordInfo = Options.Create(new GameRecordInfoOptions
         {
             GameProviderCode = "HABATF",
-            MinimumIntervalMinute = 1d,
-            IntervalMinute = 3d,
+            IntervalMinutes = 3d,
+            IntervalMinutesMax = 60d,
+            IntervalMinutesMinimum = 1d,
             LockMinute = 2d
         });
         var fakeClient = Substitute.For<IGameCommandClient>();
@@ -71,8 +72,9 @@ public class UtensilRepositoryUnitTest
         var gameRecordInfo = Options.Create(new GameRecordInfoOptions
         {
             GameProviderCode = "HABATF",
-            MinimumIntervalMinute = 1d,
-            IntervalMinute = 3d,
+            IntervalMinutes = 3d,
+            IntervalMinutesMax = 60d,
+            IntervalMinutesMinimum = 1d,
             LockMinute = 2d
         });
         var fakeClient = Substitute.For<IGameCommandClient>();
@@ -127,8 +129,9 @@ public class UtensilRepositoryUnitTest
         var gameRecordInfo = Options.Create(new GameRecordInfoOptions
         {
             GameProviderCode = "HABATF",
-            MinimumIntervalMinute = 1d,
-            IntervalMinute = 3d,
+            IntervalMinutes = 3d,
+            IntervalMinutesMax = 60d,
+            IntervalMinutesMinimum = 1d,
             LockMinute = 2d
         });
         var fakeClient = Substitute.For<IGameCommandClient>();
@@ -176,8 +179,9 @@ public class UtensilRepositoryUnitTest
         var gameRecordInfo = Options.Create(new GameRecordInfoOptions
         {
             GameProviderCode = "HABATF",
-            MinimumIntervalMinute = 1d,
-            IntervalMinute = 3d,
+            IntervalMinutes = 3d,
+            IntervalMinutesMax = 60d,
+            IntervalMinutesMinimum = 1d,
             LockMinute = 2d
         });
         var fakeClient = Substitute.For<IGameCommandClient>();
@@ -216,8 +220,9 @@ public class UtensilRepositoryUnitTest
         var gameRecordInfo = Options.Create(new GameRecordInfoOptions
         {
             GameProviderCode = "HABATF",
-            MinimumIntervalMinute = 1d,
-            IntervalMinute = 3d,
+            IntervalMinutes = 3d,
+            IntervalMinutesMax = 60d,
+            IntervalMinutesMinimum = 1d,
             LockMinute = 2d
         });
         var fakeClient = Substitute.For<IGameCommandClient>();
