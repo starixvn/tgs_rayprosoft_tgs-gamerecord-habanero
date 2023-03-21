@@ -1,6 +1,6 @@
 ﻿using System.Text.Json;
 using Tgs.GameRounds.Work.Client;
-using Tgs.GameRounds.Work.Common.Protos;
+using Tgs.GameRounds.Work.Manual.Common.Protos;
 using Tgs.ServiceUtility;
 
 namespace Tgs.GameRecord.HabaneroService.Core.ApplicationServices;
