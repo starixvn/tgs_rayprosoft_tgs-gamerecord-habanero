@@ -3,22 +3,18 @@ using Microsoft.Extensions.Options;
 using NSubstitute;
 using Tgs.GameCommand.Client;
 using Tgs.GameCommand.Common;
+using Tgs.GameRecord.HabaneroService.Core;
 
-namespace Tgs.GameRecord.HabaneroService.Core.UnitTest;
+namespace Tgs.GameRecord.HABATF.Core.UnitTest;
 
-[TestClass]
 public class UtensilRepositoryUnitTest
 {
-    [TestMethod]
+    [Fact]
     public async Task Get_Brand_GameProvider_Configuration_Id()
     {
         var gameRecordInfo = Options.Create(new GameRecordInfoOptions
         {
-            GameProviderCode = "HABATF",
-            IntervalMinutes = 3d,
-            IntervalMinutesMax = 60d,
-            IntervalMinutesMinimum = 1d,
-            LockMinute = 2d
+            GameProviderCode = "HABATF"
         });
         var fakeClient = Substitute.For<IGameCommandClient>();
         var fakeMemoryCache = Substitute.For<IMemoryCache>();
@@ -55,9 +51,9 @@ public class UtensilRepositoryUnitTest
                 gameProviderId)
             .ConfigureAwait(false);
 
-        Assert.IsNotNull(actual);
-        Assert.IsTrue(actual.HasValue);
-        Assert.AreEqual(gameProviderConfigurationId, actual.Value);
+        Assert.NotNull(actual);
+        Assert.True(actual.HasValue);
+        Assert.Equal(gameProviderConfigurationId, actual.Value);
 
         _ = fakeMemoryCache
             .Received(1)
@@ -66,16 +62,12 @@ public class UtensilRepositoryUnitTest
                 gameProviderConfigurationId);
     }
 
-    [TestMethod]
+    [Fact]
     public async Task Get_Game_Id()
     {
         var gameRecordInfo = Options.Create(new GameRecordInfoOptions
         {
-            GameProviderCode = "HABATF",
-            IntervalMinutes = 3d,
-            IntervalMinutesMax = 60d,
-            IntervalMinutesMinimum = 1d,
-            LockMinute = 2d
+            GameProviderCode = "HABATF"
         });
         var fakeClient = Substitute.For<IGameCommandClient>();
         var fakeMemoryCache = Substitute.For<IMemoryCache>();
@@ -112,9 +104,9 @@ public class UtensilRepositoryUnitTest
                 gameExternalId)
             .ConfigureAwait(false);
 
-        Assert.IsNotNull(actual);
-        Assert.IsTrue(actual.HasValue);
-        Assert.AreEqual(gameId, actual.Value);
+        Assert.NotNull(actual);
+        Assert.True(actual.HasValue);
+        Assert.Equal(gameId, actual.Value);
 
         _ = fakeMemoryCache
             .Received(1)
@@ -123,16 +115,12 @@ public class UtensilRepositoryUnitTest
                 gameId);
     }
 
-    [TestMethod]
+    [Fact]
     public async Task Get_GameProvider_Id()
     {
         var gameRecordInfo = Options.Create(new GameRecordInfoOptions
         {
-            GameProviderCode = "HABATF",
-            IntervalMinutes = 3d,
-            IntervalMinutesMax = 60d,
-            IntervalMinutesMinimum = 1d,
-            LockMinute = 2d
+            GameProviderCode = "HABATF"
         });
         var fakeClient = Substitute.For<IGameCommandClient>();
         var fakeMemoryCache = Substitute.For<IMemoryCache>();
@@ -163,8 +151,7 @@ public class UtensilRepositoryUnitTest
             .GetGameProviderIdAsync()
             .ConfigureAwait(false);
 
-        Assert.IsNotNull(actual);
-        Assert.AreEqual(gameProviderId, actual);
+        Assert.Equal(gameProviderId, actual);
 
         _ = fakeMemoryCache
             .Received(1)
@@ -173,22 +160,18 @@ public class UtensilRepositoryUnitTest
                 gameProviderId);
     }
 
-    [TestMethod]
+    [Fact]
     public async Task Get_GameProvider_Id_Exception()
     {
         var gameRecordInfo = Options.Create(new GameRecordInfoOptions
         {
-            GameProviderCode = "HABATF",
-            IntervalMinutes = 3d,
-            IntervalMinutesMax = 60d,
-            IntervalMinutesMinimum = 1d,
-            LockMinute = 2d
+            GameProviderCode = "HABATF"
         });
         var fakeClient = Substitute.For<IGameCommandClient>();
         var fakeMemoryCache = Substitute.For<IMemoryCache>();
         var absoluteExpirationRelativeToNow = TimeSpan.FromHours(1);
 
-        var key = $"{gameRecordInfo.Value.GameProviderCode}";
+        var key = $"gamerecord:{gameRecordInfo.Value.GameProviderCode}";
 
         _ = fakeMemoryCache
             .TryGetValue(
@@ -208,22 +191,18 @@ public class UtensilRepositoryUnitTest
             fakeMemoryCache,
             absoluteExpirationRelativeToNow);
 
-        _ = await Assert.ThrowsExceptionAsync<Exception>(() => repository
+        _ = await Assert.ThrowsAsync<Exception>(() => repository
              .GetGameProviderIdAsync()
              .AsTask())
              .ConfigureAwait(false);
     }
 
-    [TestMethod]
+    [Fact]
     public async Task Get_Player()
     {
         var gameRecordInfo = Options.Create(new GameRecordInfoOptions
         {
-            GameProviderCode = "HABATF",
-            IntervalMinutes = 3d,
-            IntervalMinutesMax = 60d,
-            IntervalMinutesMinimum = 1d,
-            LockMinute = 2d
+            GameProviderCode = "HABATF"
         });
         var fakeClient = Substitute.For<IGameCommandClient>();
         var fakeMemoryCache = Substitute.For<IMemoryCache>();
@@ -267,8 +246,8 @@ public class UtensilRepositoryUnitTest
                 playerCode: playerCode)
             .ConfigureAwait(false);
 
-        Assert.IsNotNull(actual);
-        Assert.AreEqual(playerCode, player.PlayerCode);
+        Assert.NotNull(actual);
+        Assert.Equal(playerCode, actual.PlayerCode);
 
         _ = fakeMemoryCache
             .Received(1)

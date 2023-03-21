@@ -12,8 +12,9 @@ data:
           }
       },
       "GameRecord": {
-         "GameCommandClientBaseUrl": "http://game-gamecommand/",
-         "GameInterfaceBaseUrl": "http://game-gameinterface-habanero-service:9090/"
+        "GameCommandClientBaseUrl": "http://game-gamecommand/",
+        "GameRoundsScheduleClientBaseUrl": "http://game-gamerounds-schedule:9090/",
+        "GameInterfaceClientBaseUrl": "http://game-gameinterface-habanero-service:9090/"
       }
     }
   otel-collector-config.yaml: |
