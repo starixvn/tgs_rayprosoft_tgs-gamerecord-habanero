@@ -82,7 +82,7 @@ builder.Services
             var configuration = sp.GetRequiredService<IConfiguration>();
             options.Url = configuration.GetConnectionString("Nats")!;
         })
-        .AddHandler<ScheduleFormQueuedMessageHandler>(subject: "gp.gamerecord.scheduleform.habanero.queued", group: "gp.gamerecord.scheduleform.habanero")
+        .AddHandler<ScheduleFormQueuedMessageHandler>(subject: "gp.gamerecord.scheduleform.habatf.queued", group: "gp.gamerecord.scheduleform.habatf")
         .AddHandler<ScheduleMessageHandler>(subject: "gp.gamerecord.schedule.habatf", group: "gp.gamerecord.schedule");
     })
     .ClearAllExchanges()
