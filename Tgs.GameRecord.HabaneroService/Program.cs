@@ -84,7 +84,9 @@ builder.Services
         })
         .AddHandler<ScheduleFormQueuedMessageHandler>(subject: "gp.gamerecord.scheduleform.habanero.queued", group: "gp.gamerecord.scheduleform.habanero")
         .AddHandler<ScheduleMessageHandler>(subject: "gp.gamerecord.schedule.habatf", group: "gp.gamerecord.schedule");
-    });
+    })
+    .ClearAllExchanges()
+    .AddNatsGlobPatternExchange("*");
 
 builder.Services
     .AddOpenTelemetry()
