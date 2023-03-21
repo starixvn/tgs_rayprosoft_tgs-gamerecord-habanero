@@ -6,9 +6,9 @@ using Tgs.GameRecord.HabaneroService.Core;
 
 namespace Microsoft.Extensions.DependencyInjection;
 
-public static class GameRecordRegisterExtensions
+public static class ServiceRegisterExtensions
 {
-    public static async Task<WebApplication> UseGameRecordRegister(this WebApplication app)
+    public static async Task<WebApplication> UseRegister(this WebApplication app)
     {
         using (var scope = app.Services.CreateScope())
         {
@@ -20,7 +20,7 @@ public static class GameRecordRegisterExtensions
 
             var games = client
                 .GameQueryAsync(
-                    gameProviderCode: gameRecordInfo.GameProviderCode)
+                    gameProviderCode: gameRecordInfo!.GameProviderCode)
                 .ToEnumerable()
                 ?? Enumerable.Empty<GameInfo>();
 

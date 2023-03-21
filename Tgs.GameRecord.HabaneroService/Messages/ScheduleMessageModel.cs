@@ -1,4 +1,4 @@
-﻿namespace Tgs.GameRecord.HabaneroService;
+﻿namespace Tgs.GameRecord.HabaneroService.Messages;
 
 public record ScheduleMessageModel(
     Uri ApiUrl,
