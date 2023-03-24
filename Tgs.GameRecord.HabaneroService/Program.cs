@@ -5,7 +5,6 @@ using OpenTelemetry.Instrumentation.AspNetCore;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
-using Prometheus;
 using Tgs.GameRecord.HabaneroService.Messages;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -119,9 +118,7 @@ builder.Services
     .AddInterceptionService()
     .AddServiceUtiltiyInterceptors();
 
-builder.Services
-    .AddHealthChecks()
-    .ForwardToPrometheus();
+builder.Services.AddHealthChecks();
 
 var app = builder.Build();
 
