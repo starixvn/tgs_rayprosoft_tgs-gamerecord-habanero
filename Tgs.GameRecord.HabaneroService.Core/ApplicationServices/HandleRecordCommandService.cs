@@ -1,24 +1,24 @@
 ﻿using System.Text.Json;
-using Tgs.GameRounds.Work.Manual.Client;
-using Tgs.GameRounds.Work.Manual.Common.Protos;
+using Tgs.GameRounds.Work.Client;
+using Tgs.GameRounds.Work.Common.Protos;
 using Tgs.ServiceUtility;
 
 namespace Tgs.GameRecord.HabaneroService.Core.ApplicationServices;
 
-internal class ManualHandleRecordCommandService : ICommandService<ManualHandleRecordCommand>
+internal class HandleRecordCommandService : ICommandService<HandleRecordCommand>
 {
     private readonly IUtensil _utensil;
-    private readonly IGameRoundsWorkManualClient _workClient;
+    private readonly IGameRoundsWorkClient _workClient;
 
-    public ManualHandleRecordCommandService(
+    public HandleRecordCommandService(
         IUtensil utensil,
-        IGameRoundsWorkManualClient workClient)
+        IGameRoundsWorkClient workClient)
     {
         _utensil = utensil ?? throw new ArgumentNullException(nameof(utensil));
         _workClient = workClient ?? throw new ArgumentNullException(nameof(workClient));
     }
 
-    public async ValueTask ExecuteAsync(ManualHandleRecordCommand command, CancellationToken cancellationToken = default)
+    public async ValueTask ExecuteAsync(HandleRecordCommand command, CancellationToken cancellationToken = default)
     {
         var gameProviderId = await _utensil
             .GetGameProviderIdAsync(

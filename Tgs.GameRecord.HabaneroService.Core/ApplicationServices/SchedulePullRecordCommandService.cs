@@ -9,12 +9,12 @@ internal class SchedulePullRecordCommandService : ICommandService<SchedulePullRe
 {
     private readonly IGameInterfaceHabaneroClient _client;
     private readonly ILogger<SchedulePullRecordCommandService> _logger;
-    private readonly ICommandService<ScheduleHandleRecordCommand> _service;
+    private readonly ICommandService<HandleRecordCommand> _service;
 
     public SchedulePullRecordCommandService(
         ILogger<SchedulePullRecordCommandService> logger,
         IGameInterfaceHabaneroClient client,
-        ICommandService<ScheduleHandleRecordCommand> service)
+        ICommandService<HandleRecordCommand> service)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _client = client ?? throw new ArgumentNullException(nameof(client));

@@ -5,13 +5,6 @@ VisualStudioVersion = 17.3.32804.467
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tgs.GameRecord.HabaneroService", "Tgs.GameRecord.HabaneroService\Tgs.GameRecord.HabaneroService.csproj", "{9A5A30FD-7902-4462-AC45-039863AB1693}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{B915669A-2552-4934-BF1D-0B0D50E98190}"
-	ProjectSection(SolutionItems) = preProject
-		.editorconfig = .editorconfig
-		CodeMaid.config = CodeMaid.config
-		nuget.config = nuget.config
-	EndProjectSection
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tgs.GameRecord.HabaneroService.Core", "Tgs.GameRecord.HabaneroService.Core\Tgs.GameRecord.HabaneroService.Core.csproj", "{5F4AC051-6DFC-41FB-A490-4DDB7AE6EC46}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tgs.GameRecord.HabaneroService.Core.UnitTest", "Tgs.GameRecord.HabaneroService.Core.UnitTest\Tgs.GameRecord.HabaneroService.Core.UnitTest.csproj", "{1C722816-3CB0-4F7C-B49A-6E736FA48574}"
