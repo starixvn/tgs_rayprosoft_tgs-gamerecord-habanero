@@ -1,5 +1,4 @@
-﻿using System.Text.Json;
-using Tgs.GameRounds.Work.Client;
+﻿using Tgs.GameRounds.Work.Client;
 using Tgs.GameRounds.Work.Common.Protos;
 using Tgs.ServiceUtility;
 
@@ -22,99 +21,72 @@ internal class HandleRecordCommandService : ICommandService<HandleRecordCommand>
     {
         var gameProviderId = await _utensil
             .GetGameProviderIdAsync(
-                cancellationToken)
+            cancellationToken: cancellationToken)
             .ConfigureAwait(false);
-        var gameProviderCode = _utensil
-            .GetGameProviderCode();
-        var record = command.GameRecord;
 
-        bool success = true;
+        var gameProviderCode = _utensil.GetGameProviderCode();
+
         var playerModel = await _utensil
             .GetPlayerAsync(
-                playerCode: record.PlayerCode,
-                cancellationToken: cancellationToken)
+            playerCode: command.Record.PlayerCode,
+            cancellationToken: cancellationToken)
             .ConfigureAwait(false);
+
         var gameId = await _utensil
             .GetGameIdAsync(
-                gameProviderId: gameProviderId,
-                gameExternalId: record.ExternalGameId,
-                cancellationToken: cancellationToken).ConfigureAwait(false);
-        if (playerModel == null || !gameId.HasValue)
-        {
-            success = false;
-        }
+            gameProviderId: gameProviderId,
+            gameExternalId: command.Record.ExternalGameId,
+            cancellationToken: cancellationToken)
+            .ConfigureAwait(false);
 
-        Guid? gameProviderConfigurationId = default;
-        if (playerModel != null)
-        {
-            gameProviderConfigurationId = await _utensil
-                .GetBrandGameProviderConfigurationIdAsync(
-                    brandId: playerModel.BrandId,
-                    gameProviderId: gameProviderId,
-                    cancellationToken: cancellationToken).ConfigureAwait(false);
-            if (!gameProviderConfigurationId.HasValue)
-            {
-                success = false;
-            }
-        }
+        var gameProviderConfigurationId = await _utensil
+            .GetBrandGameProviderConfigurationIdAsync(
+            brandId: playerModel.BrandId,
+            gameProviderId: gameProviderId,
+            cancellationToken: cancellationToken)
+            .ConfigureAwait(false);
+
         var status = RoundStatus.Closed;
-        var externalCreatedOn = record.ExternalCreatedOn.ToDateTimeOffset();
-        var externalClosedOn = record.ExternalCreatedOn.ToDateTimeOffset();
-        var bet = record.Bet.ToDecimal().GetValueOrDefault(0);
-        var validBet = record.Bet.ToDecimal().GetValueOrDefault(0);
-        var settle = record.Settle.ToDecimal().GetValueOrDefault(0);
+        var externalCreatedOn = command.Record.ExternalCreatedOn.ToDateTimeOffset();
+        var externalClosedOn = command.Record.ExternalClosedOn.ToDateTimeOffset();
+        var bet = command.Record.Bet.ToDecimal().GetValueOrDefault(0);
+        var validBet = command.Record.Bet.ToDecimal().GetValueOrDefault(0);
+        var settle = command.Record.Settle.ToDecimal().GetValueOrDefault(0);
         var commission = 0;
-        var turnover = record.Turnover.ToDecimal().GetValueOrDefault(0);
-        var winLoss = record.PlayerWinLoss.ToDecimal().GetValueOrDefault(0);
-        var clientStatus = record.GameStateId is 4
+        var turnover = command.Record.Turnover.ToDecimal().GetValueOrDefault(0);
+        var winLoss = command.Record.PlayerWinLoss.ToDecimal().GetValueOrDefault(0);
+        var clientStatus = command.Record.GameStateId is 4
             ? RoundClientStatus.Void
-            : record.PlayerWinLoss < 0
+            : command.Record.PlayerWinLoss < 0
             ? RoundClientStatus.Loss
-            : record.PlayerWinLoss > 0
+            : command.Record.PlayerWinLoss > 0
             ? RoundClientStatus.Win
             : RoundClientStatus.Draw;
 
-        if (success)
-        {
-            await _workClient
-            .RoundBidding(
-                gameProviderId: gameProviderId,
-                gameProviderCode: gameProviderCode,
-                externalRoundId: record.ExternalRoundId,
-                gameId: gameId!.Value,
-                externalGameId: record.ExternalGameId,
-                playerCode: playerModel!.PlayerCode,
-                walletId: playerModel!.DefaultWalletId,
-                currencyCode: playerModel!.DefaultWalletCurrencyCode,
-                brandId: playerModel!.BrandId,
-                gameProviderConfigurationId: gameProviderConfigurationId!.Value,
-                status: status,
-                clientStatus: clientStatus,
-                externalCreatedOn: externalCreatedOn,
-                externalClosedOn: externalClosedOn,
-                bet: bet,
-                validBet: validBet,
-                settle: settle,
-                commission: commission,
-                turnover: turnover,
-                playerWinLoss: winLoss,
-                additionalData: string.Empty,
-                cancellationToken: cancellationToken)
-            .ConfigureAwait(false);
-        }
-        else
-        {
-            await _workClient
-            .RoundMissing(
-                gameProviderId: gameProviderId,
-                gameProviderCode: gameProviderCode,
-                externalRoundId: record.ExternalRoundId,
-                gameId: gameId ?? -1,
-                externalGameId: record.ExternalGameId,
-                playerCode: playerModel?.PlayerCode ?? string.Empty,
-                data: JsonSerializer.Serialize(record),
-                cancellationToken: cancellationToken)
-            .ConfigureAwait(false);
-        }
+        await _workClient
+        .RoundExchangeRateBiddingAsync(
+            gameProviderId: gameProviderId,
+            gameProviderCode: gameProviderCode,
+            externalRoundId: command.Record.ExternalRoundId,
+            gameId: gameId,
+            externalGameId: command.Record.ExternalGameId,
+            playerCode: playerModel.PlayerCode,
+            walletId: playerModel.DefaultWalletId,
+            currencyCode: playerModel.DefaultWalletCurrencyCode,
+            brandId: playerModel.BrandId,
+            gameProviderConfigurationId: gameProviderConfigurationId,
+            status: status,
+            clientStatus: clientStatus,
+            externalCreatedOn: externalCreatedOn,
+            externalClosedOn: externalClosedOn,
+            bet: bet,
+            validBet: validBet,
+            settle: settle,
+            commission: commission,
+            turnover: turnover,
+            playerWinLoss: winLoss,
+            additionalData: command.Record.AdditionalData,
+            cancellationToken: cancellationToken)
+        .ConfigureAwait(false);
     }
 }

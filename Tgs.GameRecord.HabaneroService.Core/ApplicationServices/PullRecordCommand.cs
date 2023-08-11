@@ -1,6 +1,6 @@
 ﻿namespace Tgs.GameRecord.HabaneroService.Core.ApplicationServices;
 
-public record SchedulePullRecordCommand(
+public record PullRecordCommand(
     Uri ApiUrl,
     string BrandId,
     string ApiKey,

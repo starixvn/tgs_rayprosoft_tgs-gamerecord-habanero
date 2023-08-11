@@ -12,22 +12,19 @@ internal class ScheduleFormDispatcher : IScheduleFormDispatcher
 {
     private readonly IGameRoundsScheduleClient _clinet;
     private readonly ILogger<ScheduleFormDispatcher> _logger;
-    private readonly ICommandService<ManualPullRecordCommand> _manualService;
     private readonly IScheduleFormLock _scheduleFormLock;
-    private readonly ICommandService<SchedulePullRecordCommand> _scheduleService;
+    private readonly ICommandService<PullRecordCommand> _service;
 
     public ScheduleFormDispatcher(
         ILogger<ScheduleFormDispatcher> logger,
         IGameRoundsScheduleClient clinet,
         IScheduleFormLock scheduleFormLock,
-        ICommandService<SchedulePullRecordCommand> scheduleService,
-        ICommandService<ManualPullRecordCommand> manualService)
+        ICommandService<PullRecordCommand> service)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _clinet = clinet ?? throw new ArgumentNullException(nameof(clinet));
         _scheduleFormLock = scheduleFormLock ?? throw new ArgumentNullException(nameof(scheduleFormLock));
-        _scheduleService = scheduleService ?? throw new ArgumentNullException(nameof(scheduleService));
-        _manualService = manualService ?? throw new ArgumentNullException(nameof(manualService));
+        _service = service ?? throw new ArgumentNullException(nameof(service));
     }
 
     public async ValueTask ExecuteAsync(
@@ -65,48 +62,28 @@ internal class ScheduleFormDispatcher : IScheduleFormDispatcher
         {
             await _clinet
                 .ScheduleFormProcessingAsync(
-                    gameProviderCode: gameProviderCode,
-                    id: id,
-                    cancellationToken: cancellationToken)
+                gameProviderCode: gameProviderCode,
+                id: id,
+                cancellationToken: cancellationToken)
                 .ConfigureAwait(false);
 
             var parameter = JsonSerializer.Deserialize<HabaneroParameter>(scheduleForm.Parameters)
                 ?? throw new Exception($"This game provider ({gameProviderCode}) scheduling form parameter is null. ({id})");
 
-            if (scheduleForm.Source == ScheduleFormSource.Schedule)
-            {
-                var command = new SchedulePullRecordCommand(
-                    ApiUrl: new Uri(parameter.ApiUrl),
-                    BrandId: parameter.BrandId,
-                    ApiKey: parameter.ApiKey,
-                    StartTime: parameter.StartTime.ToDateTimeOffset(),
-                    EndTime: parameter.EndTime.ToDateTimeOffset());
+            var command = new PullRecordCommand(
+                ApiUrl: new Uri(parameter.ApiUrl),
+                BrandId: parameter.BrandId,
+                ApiKey: parameter.ApiKey,
+                StartTime: parameter.StartTime.ToDateTimeOffset(),
+                EndTime: parameter.EndTime.ToDateTimeOffset());
 
-                _logger.LogInformation("LogOn:{logOn} execute the command:{command}", DateTime.Now.ToString("o"), command);
+            _logger.LogInformation("LogOn:{logOn} execute the command:{command}", DateTime.Now.ToString("o"), command);
 
-                await _scheduleService
-                    .ExecuteAsync(
-                        command: command,
-                        cancellationToken: cancellationToken)
-                    .ConfigureAwait(false);
-            }
-            else
-            {
-                var command = new ManualPullRecordCommand(
-                    ApiUrl: new Uri(parameter.ApiUrl),
-                    BrandId: parameter.BrandId,
-                    ApiKey: parameter.ApiKey,
-                    StartTime: parameter.StartTime.ToDateTimeOffset(),
-                    EndTime: parameter.EndTime.ToDateTimeOffset());
-
-                _logger.LogWarning("LogOn:{logOn} execute the command:{command}", DateTime.Now.ToString("o"), command);
-
-                await _manualService
-                    .ExecuteAsync(
-                        command: command,
-                        cancellationToken: cancellationToken)
-                    .ConfigureAwait(false);
-            }
+            await _service
+                .ExecuteAsync(
+                command: command,
+                cancellationToken: cancellationToken)
+                .ConfigureAwait(false);
 
             await _clinet
                 .ScheduleFormCompleteAsync(

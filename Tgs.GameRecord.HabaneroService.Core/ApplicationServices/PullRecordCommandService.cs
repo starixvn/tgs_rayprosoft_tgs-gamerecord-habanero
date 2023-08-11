@@ -5,14 +5,14 @@ using Tgs.ServiceUtility;
 
 namespace Tgs.GameRecord.HabaneroService.Core.ApplicationServices;
 
-internal class ManualPullRecordCommandService : ICommandService<ManualPullRecordCommand>
+internal class PullRecordCommandService : ICommandService<PullRecordCommand>
 {
     private readonly IGameInterfaceHabaneroClient _client;
-    private readonly ILogger<ManualPullRecordCommandService> _logger;
+    private readonly ILogger<PullRecordCommandService> _logger;
     private readonly ICommandService<HandleRecordCommand> _service;
 
-    public ManualPullRecordCommandService(
-        ILogger<ManualPullRecordCommandService> logger,
+    public PullRecordCommandService(
+        ILogger<PullRecordCommandService> logger,
         IGameInterfaceHabaneroClient client,
         ICommandService<HandleRecordCommand> service)
     {
@@ -21,7 +21,7 @@ internal class ManualPullRecordCommandService : ICommandService<ManualPullRecord
         _service = service ?? throw new ArgumentNullException(nameof(service));
     }
 
-    public async ValueTask ExecuteAsync(ManualPullRecordCommand command, CancellationToken cancellationToken = default)
+    public async ValueTask ExecuteAsync(PullRecordCommand command, CancellationToken cancellationToken = default)
     {
         var gameRecords = await _client
             .GameHistorySettledAsync(
@@ -54,7 +54,7 @@ internal class ManualPullRecordCommandService : ICommandService<ManualPullRecord
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "遊戲紀錄處理發生例外.({gameRecord})", gameRecord);
+                _logger.LogError(ex, "LogOn:{logOn} Message: game record exception.({gameRecord})", DateTime.Now.ToString("o"), gameRecord);
             }
         }
     }

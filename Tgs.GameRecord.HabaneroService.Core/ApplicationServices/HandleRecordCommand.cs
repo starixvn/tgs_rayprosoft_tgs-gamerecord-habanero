@@ -2,4 +2,4 @@
 
 namespace Tgs.GameRecord.HabaneroService.Core.ApplicationServices;
 
-public record HandleRecordCommand(GameHistorySettled GameRecord);
+public record HandleRecordCommand(GameHistorySettled Record);
