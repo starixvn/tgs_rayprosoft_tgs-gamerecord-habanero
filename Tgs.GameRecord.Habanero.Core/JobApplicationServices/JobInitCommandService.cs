@@ -81,12 +81,12 @@ internal class JobInitCommandService : ICommandService<JobInitCommand>
                 var apiUrl = new Uri(configurationDataJson["ApiUrl"]?.ToString()
                     ?? settingConfigurationJson["ApiUrl"]?.ToString()
                     ?? throw new Exception($"Required parameters(ApiUrl)"));
-                var agentCode = configurationDataJson["AgentCode"]?.ToString()
-                    ?? throw new Exception($"Required parameters(AgentCode)");
-                var agentKey = configurationDataJson["AgentKey"]?.ToString()
-                    ?? throw new Exception($"Required parameters(AgentKey)");
-                var currency = configurationDataJson["Currency"]?.ToString()
-                    ?? throw new Exception($"Required parameters(Currency)");
+                var brandId = configurationDataJson["BrandId"]?.ToString()
+                    ?? settingConfigurationJson["BrandId"]?.ToString()
+                    ?? throw new Exception($"Required parameters(BrandId)");
+                var apiKey = configurationDataJson["ApiKey"]?.ToString()
+                    ?? settingConfigurationJson["ApiKey"]?.ToString()
+                    ?? throw new Exception($"Required parameters(ApiKey)");
 
                 if (gameProviderAgentMapper.ContainsKey(gameProviderConfig.Name))
                 {
@@ -94,12 +94,11 @@ internal class JobInitCommandService : ICommandService<JobInitCommand>
                 }
 
                 var jobExecuteCommand = new JobExecuteCommand(
+                    GameProviderCode: gameProviderConfig.GameProviderCode,
                     Name: gameProviderConfig.Name,
                     ApiUrl: apiUrl,
-                    GameProviderCode: gameProviderConfig.GameProviderCode,
-                    AgentCode: agentCode,
-                    AgentKey: agentKey,
-                    Currency: currency);
+                    BrandId: brandId,
+                    ApiKey: apiKey);
 
                 gameProviderAgentMapper.Add(gameProviderConfig.Name, jobExecuteCommand);
 

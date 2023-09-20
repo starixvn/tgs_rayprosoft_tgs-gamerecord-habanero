@@ -21,7 +21,6 @@ internal class JobExecuteCommandService : ICommandService<JobExecuteCommand>
         _gameRecordInfo = options.Value;
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _client = client ?? throw new ArgumentNullException(nameof(client));
-
         _intervalMinutes = _gameRecordInfo.IntervalMinutesMax < _gameRecordInfo.IntervalMinutes
             ? _gameRecordInfo.IntervalMinutesMax
             : _gameRecordInfo.IntervalMinutesMinimum > _gameRecordInfo.IntervalMinutes
@@ -37,10 +36,8 @@ internal class JobExecuteCommandService : ICommandService<JobExecuteCommand>
         var parameters = new
         {
             command.ApiUrl,
-            command.GameProviderCode,
-            command.AgentCode,
-            command.AgentKey,
-            command.Currency,
+            command.BrandId,
+            command.ApiKey,
             StartTime = startTime,
             EndTime = endTime
         };
@@ -48,15 +45,14 @@ internal class JobExecuteCommandService : ICommandService<JobExecuteCommand>
         _logger.LogDebug("LogOn:{logOn} Parameters:{parameters}", DateTime.Now.ToString("u"), parameters);
 
         return _client
-            .FaChai_ScheduleFormQueuedAsync(
+            .Habanero_ScheduleFormQueuedAsync(
             gameProviderCode: command.GameProviderCode,
             name: command.Name,
-            subject: "gp.gamerecord.scheduleform.fachai.queued",
+            subject: "gp.gamerecord.scheduleform.habatf.queued",
             source: ScheduleFormSource.Schedule,
             apiUrl: parameters.ApiUrl,
-            agentCode: parameters.AgentCode,
-            agentKey: parameters.AgentKey,
-            currency: parameters.Currency,
+            brandId: parameters.BrandId,
+            apiKey: parameters.ApiKey,
             startTime: parameters.StartTime,
             endTime: parameters.EndTime,
             cancellationToken: cancellationToken);

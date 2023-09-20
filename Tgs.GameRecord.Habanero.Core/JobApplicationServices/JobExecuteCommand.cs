@@ -1,9 +1,8 @@
 ﻿namespace Tgs.GameRecord.Habanero.Core.JobApplicationServices;
 
 public record JobExecuteCommand(
+    string GameProviderCode,
     string Name,
     Uri ApiUrl,
-    string GameProviderCode,
-    string AgentCode,
-    string AgentKey,
-    string Currency);
+    string BrandId,
+    string ApiKey);
