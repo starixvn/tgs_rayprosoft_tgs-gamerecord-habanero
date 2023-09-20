@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.3.32804.467
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tgs.GameRecord.Habanero", "Tgs.GameRecord.Habanero\Tgs.GameRecord.Habanero.csproj", "{0B039EEB-A08E-4426-88C4-FFA0D6A45170}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tgs.GameRecord.Habanero.Core", "Tgs.GameRecord.Habanero.Core\Tgs.GameRecord.Habanero.Core.csproj", "{92570C44-7C1D-4177-80BB-3B3F84984B20}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tgs.GameRecord.Habanero.Core.UnitTest", "Tgs.GameRecord.Habanero.Core.UnitTest\Tgs.GameRecord.Habanero.Core.UnitTest.csproj", "{2EE20F81-5271-4E52-BDC0-F72C18487DE1}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0B039EEB-A08E-4426-88C4-FFA0D6A45170}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0B039EEB-A08E-4426-88C4-FFA0D6A45170}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0B039EEB-A08E-4426-88C4-FFA0D6A45170}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0B039EEB-A08E-4426-88C4-FFA0D6A45170}.Release|Any CPU.Build.0 = Release|Any CPU
+		{92570C44-7C1D-4177-80BB-3B3F84984B20}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{92570C44-7C1D-4177-80BB-3B3F84984B20}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{92570C44-7C1D-4177-80BB-3B3F84984B20}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{92570C44-7C1D-4177-80BB-3B3F84984B20}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2EE20F81-5271-4E52-BDC0-F72C18487DE1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2EE20F81-5271-4E52-BDC0-F72C18487DE1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2EE20F81-5271-4E52-BDC0-F72C18487DE1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2EE20F81-5271-4E52-BDC0-F72C18487DE1}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {73587589-7B6A-40FA-9641-45DF498786C7}
+	EndGlobalSection
+EndGlobal

@@ -1,9 +1,8 @@
 variables:
-  ImageName: pgtgs/game-gamerecord-habanero-service
-  SettingKey: game-gamerecord-habanero-service
-  HelmTemplateFolderName: game-gamerecord-habanero-service
-
-  BuildCacheKey: Tgs.GameRecord.HabaneroService.$CI_PIPELINE_ID
+  ImageName: pgtgs/game-gamerecord-habanero
+  SettingKey: game-gamerecord-habanero
+  HelmTemplateFolderName: game-gamerecord-habanero
+  BuildCacheKey: Tgs.GameRecord.Habanero.$CI_PIPELINE_ID
 
 default:
   before_script:
@@ -60,7 +59,7 @@ push-docker-image:
     untracked: true   
     policy: pull
   script:
-    - dotnet build "Tgs.GameRecord.HabaneroService/Tgs.GameRecord.HabaneroService.csproj" -c $BuildConfiguration -t:ContainerBuild -p:DockerfileTag="$ImageName:$Tag" --no-restore
+    - dotnet build "Tgs.GameRecord.Habanero/Tgs.GameRecord.Habanero.csproj" -c $BuildConfiguration -t:ContainerBuild -p:DockerfileTag="$ImageName:$Tag" --no-restore
     - docker push $ImageName:$Tag
 
 push-k8s-template:
