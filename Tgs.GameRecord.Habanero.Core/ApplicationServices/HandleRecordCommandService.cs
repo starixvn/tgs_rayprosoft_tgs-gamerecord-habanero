@@ -30,9 +30,9 @@ internal class HandleRecordCommandService : ICommandService<HandleRecordCommand>
         var winLoss = command.Record.PlayerWinLoss.ToDecimal().GetValueOrDefault(0);
         var wagerState = command.Record.GameStateId is 4
             ? WagerStates.Void
-            : command.Record.PlayerWinLoss < 0
+            : winLoss < 0
             ? WagerStates.Lose
-            : command.Record.PlayerWinLoss > 0
+            : winLoss > 0
             ? WagerStates.Win
             : WagerStates.Draw;
 
