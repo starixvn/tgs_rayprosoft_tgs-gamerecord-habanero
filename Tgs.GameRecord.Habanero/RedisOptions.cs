@@ -1,4 +1,5 @@
-﻿namespace Tgs.GameRecord.Habanero.Core;
+﻿using Tgs.GameRecord.Habanero.Core;
+namespace Tgs.GameRecord.Habanero;
 
 public record RedisOptions
 {
