@@ -2,7 +2,7 @@
 
 namespace Tgs.GameRecord.Habanero.Common;
 
-public class HabaneroGameRecordMessage
+public record HabaneroGameRecordMessage
 {
     [Required]
     public string ApiKey { get; init; } = default!;
