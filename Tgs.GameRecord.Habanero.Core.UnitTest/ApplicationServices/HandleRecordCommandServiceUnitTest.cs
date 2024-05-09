@@ -19,10 +19,10 @@ public class HandleRecordCommandServiceUnitTest
 		{
 			GameProviderCode = "HABATF",
 			GameProviderConfiguration = "HABATFConfiguration",
-			HangfirePrefix = "habatf-schedule:hangfire:",
-			HangfireLocking = "habatf-locking:hangfire:",
-			IntervalMinutes = 10,
-			IntervalMinutesMax = 1440,
+			HangfirePrefix = "gamerecord-habatf-hangfire:",
+			HangfireLocking = "gamerecord-habatf-locking:",
+			IntervalMinutes = 3,
+			IntervalMinutesMax = 60,
 			IntervalMinutesMinimum = 1
 		});
 		var fakeMessageSender = Substitute.For<IMessageSender>();
@@ -93,10 +93,10 @@ public class HandleRecordCommandServiceUnitTest
 		{
 			GameProviderCode = "HABATF",
 			GameProviderConfiguration = "HABATFConfiguration",
-			HangfirePrefix = "habatf-schedule:hangfire:",
-			HangfireLocking = "habatf-locking:hangfire:",
-			IntervalMinutes = 10,
-			IntervalMinutesMax = 1440,
+			HangfirePrefix = "gamerecord-habatf-hangfire:",
+			HangfireLocking = "gamerecord-habatf-locking:",
+			IntervalMinutes = 3,
+			IntervalMinutesMax = 60,
 			IntervalMinutesMinimum = 1
 		});
 		var fakeMessageSender = Substitute.For<IMessageSender>();
@@ -167,10 +167,10 @@ public class HandleRecordCommandServiceUnitTest
 		{
 			GameProviderCode = "HABATF",
 			GameProviderConfiguration = "HABATFConfiguration",
-			HangfirePrefix = "habatf-schedule:hangfire:",
-			HangfireLocking = "habatf-locking:hangfire:",
-			IntervalMinutes = 10,
-			IntervalMinutesMax = 1440,
+			HangfirePrefix = "gamerecord-habatf-hangfire:",
+			HangfireLocking = "gamerecord-habatf-locking:",
+			IntervalMinutes = 3,
+			IntervalMinutesMax = 60,
 			IntervalMinutesMinimum = 1
 		});
 		var fakeMessageSender = Substitute.For<IMessageSender>();

@@ -6,8 +6,8 @@ public record GameRecordInfoOptions
 
 	public string GameProviderConfiguration { get; init; } = default!;
 
-	public string HangfirePrefix { get; set; } = "habatf-schedule:hangfire:";
-	public string HangfireLocking { get; set; } = "habatf-locking:hangfire:";
+	public string HangfirePrefix { get; set; } = "gamerecord-habatf-hangfire:";
+	public string HangfireLocking { get; set; } = "gamerecord-habatf-locking:";
 
 	public double IntervalMinutes { get; init; } = 3;
 
