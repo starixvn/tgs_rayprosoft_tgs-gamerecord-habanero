@@ -9,7 +9,8 @@ data:
       "Logging": {
          "LogLevel": {
           "Default": "Warning",
-          "Tgs.GameRecord.Habanero.Messages": "Information"
+          "Tgs.GameRecord.Habanero.Messages": "Information",
+          "Tgs.GameRecord.Habanero.Core.ApplicationServices.HandleRecordCommandService": "Information"
           }
       },
       "GameRecord": {

@@ -1,7 +1,6 @@
-﻿using Tgs.GameRecord.Habanero.Core;
-namespace Tgs.GameRecord.Habanero;
+﻿namespace Tgs.GameRecord.Habanero;
 
 public record RedisOptions
 {
-    public string ConnectionString { get; set; } = "localhost";
+	public string ConnectionString { get; set; } = "localhost";
 }

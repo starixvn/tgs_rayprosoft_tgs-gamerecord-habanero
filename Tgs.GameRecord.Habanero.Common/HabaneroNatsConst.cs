@@ -2,6 +2,6 @@
 
 public record HabaneroNatsConst
 {
-    public const string SchedulePublish = "gp.gamerecord.habatf.schedule";
-    public const string ManualPublish = "gp.gamerecord.habatf.manual";
+	public const string SchedulePublish = "gp.gamerecord.habatf.schedule";
+	public const string ManualPublish = "gp.gamerecord.habatf.manual";
 }
