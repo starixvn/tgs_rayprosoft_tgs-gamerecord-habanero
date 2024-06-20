@@ -9,8 +9,10 @@ data:
       "Logging": {
          "LogLevel": {
           "Default": "Warning",
-          "Tgs.GameRecord.Habanero.Messages": "Information",
-          "Tgs.GameRecord.Habanero.Core.ApplicationServices.HandleRecordCommandService": "Information"
+          "Grpc.Net.Client.Balancer": "Debug",
+          "Tgs.GameRecord.Habanero.Messages.ManualMessageHandler": "Information",
+          "Tgs.GameRecord.Habanero.Messages.ScheduleMessageHandler": "Warning",
+          "Tgs.GameRecord.Habanero.Core.ApplicationServices.HandleRecordCommandService": "Warning"
           }
       },
       "GameRecord": {
