@@ -34,10 +34,9 @@ internal class PullRecordCommandService(
 		{
 			try
 			{
-				await service
-					.ExecuteAsync(
-						command: new(gameRecord),
-						cancellationToken: cancellationToken)
+				await service.ExecuteAsync(
+					command: new(gameRecord),
+					cancellationToken: cancellationToken)
 					.ConfigureAwait(false);
 			}
 			catch (Exception ex)

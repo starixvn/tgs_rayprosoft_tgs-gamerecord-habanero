@@ -1,15 +1,15 @@
 ﻿using System.Text;
 using System.Text.Json;
 using Tgs.GameRecord.Habanero.Common;
+using Tgs.GameRecord.Habanero.Core;
 using Tgs.GameRecord.Habanero.Core.ApplicationServices;
-using Tgs.ServiceUtility;
 using Valhalla.MessageQueue;
 
 namespace Tgs.GameRecord.Habanero.Messages;
 
 internal class ManualMessageHandler(
 	ILogger<ManualMessageHandler> logger,
-	ICommandService<PullRecordCommand> service) : IMessageHandler<ReadOnlyMemory<byte>>
+	IPullRecordDispatcher dispatcher) : IMessageHandler<ReadOnlyMemory<byte>>
 {
 	public ValueTask HandleAsync(string subject, ReadOnlyMemory<byte> data, IEnumerable<MessageHeaderValue>? headerValues, CancellationToken cancellationToken = default)
 	{
@@ -17,20 +17,29 @@ internal class ManualMessageHandler(
 		var message = JsonSerializer.Deserialize<HabaneroGameRecordMessage>(json)
 			?? throw new NullReferenceException("The request data resolves to a null value");
 
-		logger.LogInformation("LogOn:{logOn} Subject:{subject} Information Request:{message}",
-			DateTime.Now.ToString("o"),
-			subject,
-			message);
+		logger.LogInformation("{logInformation}",
+			JsonSerializer.Serialize(new
+			{
+				LogOn = DateTime.Now.ToString("u"),
+				Subject = subject,
+				Data = new
+				{
+					message.ApiUrl,
+					message.BrandId,
+					message.ApiKey,
+					StartTime = message.StartTime.ToString("u"),
+					EndTime = message.EndTime.ToString("u")
+				},
+				Message = "This message receiving handler."
+			}));
 
-		var command = new PullRecordCommand(
-			ApiUrl: message.ApiUrl,
-			BrandId: message.BrandId,
-			ApiKey: message.ApiKey,
-			StartTime: message.StartTime,
-			EndTime: message.EndTime);
-
-		return service.ExecuteAsync(
-			command: command,
+		return dispatcher.PushCommandAsync(
+			command: new PullRecordCommand(
+				ApiUrl: message.ApiUrl,
+				BrandId: message.BrandId,
+				ApiKey: message.ApiKey,
+				StartTime: message.StartTime,
+				EndTime: message.EndTime),
 			cancellationToken: cancellationToken);
 	}
 }

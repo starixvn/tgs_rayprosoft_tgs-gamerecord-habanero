@@ -9,7 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tgs.GameRecord.Habanero.Cor
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tgs.GameRecord.Habanero.Core.UnitTest", "Tgs.GameRecord.Habanero.Core.UnitTest\Tgs.GameRecord.Habanero.Core.UnitTest.csproj", "{2EE20F81-5271-4E52-BDC0-F72C18487DE1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tgs.GameRecord.Habanero.Common", "Tgs.GameRecord.Habanero.Common\Tgs.GameRecord.Habanero.Common.csproj", "{FA76516B-B909-4CB0-9E2E-2E8E4E0B5151}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tgs.GameRecord.Habanero.Common", "Tgs.GameRecord.Habanero.Common\Tgs.GameRecord.Habanero.Common.csproj", "{FA76516B-B909-4CB0-9E2E-2E8E4E0B5151}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tgs.GameRecord.Habanero.Repositories", "Tgs.GameRecord.Habanero.Repositories\Tgs.GameRecord.Habanero.Repositories.csproj", "{31183906-6E39-4CB4-832B-01909464517D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{FA76516B-B909-4CB0-9E2E-2E8E4E0B5151}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FA76516B-B909-4CB0-9E2E-2E8E4E0B5151}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FA76516B-B909-4CB0-9E2E-2E8E4E0B5151}.Release|Any CPU.Build.0 = Release|Any CPU
+		{31183906-6E39-4CB4-832B-01909464517D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{31183906-6E39-4CB4-832B-01909464517D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{31183906-6E39-4CB4-832B-01909464517D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{31183906-6E39-4CB4-832B-01909464517D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
