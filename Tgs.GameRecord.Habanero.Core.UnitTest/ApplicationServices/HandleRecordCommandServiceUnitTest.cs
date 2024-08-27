@@ -5,6 +5,7 @@ using Microsoft.Extensions.Options;
 using NSubstitute;
 using Tgs.GameInterface.HabaneroService.Protos;
 using Tgs.GameRecord.Habanero.Core.ApplicationServices;
+using Tgs.GameRecord.Handle.Client;
 using Valhalla.MessageQueue;
 
 namespace Tgs.GameRecord.Habanero.Core.UnitTest.ApplicationServices;
@@ -15,7 +16,7 @@ public class HandleRecordCommandServiceUnitTest
 	public async Task Loss()
 	{
 		var faceLogger = NullLogger<HandleRecordCommandService>.Instance;
-		var gameRecordInfo = Options.Create(new GameRecordInfoOptions
+		var fakeGameRecordInfoOptions = Options.Create(new GameRecordInfoOptions
 		{
 			GameProviderCode = "HABATF",
 			GameProviderConfiguration = "HABATFConfiguration",
@@ -25,7 +26,12 @@ public class HandleRecordCommandServiceUnitTest
 			IntervalMinutesMax = 60,
 			IntervalMinutesMinimum = 1
 		});
-		var fakeMessageSender = Substitute.For<IMessageSender>();
+		var fakePolicySettingsOptions = Options.Create(new PolicySettingsOptions
+		{
+			RetryCount = 1,
+			RetrySeconds = 1,
+		});
+		var fakeGameRecordHandleClient = Substitute.For<IGameRecordHandleClient>();
 
 		var command = new HandleRecordCommand(
 			new GameHistorySettled
@@ -44,28 +50,28 @@ public class HandleRecordCommandServiceUnitTest
 				AdditionalData = "{\"GameStateId\":3,\"FeatureCount\":0,\"BuyFeatureId\":0,\"PlayerId\":\"89dc452b-4637-ee11-b8f0-6045bd569110\",\"BrandId\":\"a452e523-8d40-ed11-a27c-00155db8f23b\",\"Username\":\"4ukop6pr8zj6\",\"BrandGameId\":\"01acc930-4978-4d9d-9b7d-7e961f6894ec\",\"GameKeyName\":\"SGMountMazuma\",\"GameTypeId\":11,\"DtStarted\":\"2023-08-10T06:26:04.49\",\"DtCompleted\":\"2023-08-10T06:26:04.59\",\"FriendlyGameInstanceId\":79003315691,\"GameInstanceId\":\"a2cb7cc6-4637-ee11-b8f0-6045bd569110\",\"Stake\":1.4,\"Payout\":0.0,\"JackpotWin\":0.0,\"JackpotContribution\":0.0,\"CurrencyCode\":\"HKD\",\"ChannelTypeId\":4,\"BalanceAfter\":88.8}"
 			});
 
-		var service = new HandleRecordCommandService(
+		var sut = new HandleRecordCommandService(
 			faceLogger,
-			gameRecordInfo,
-			fakeMessageSender);
+			fakeGameRecordInfoOptions,
+			fakePolicySettingsOptions,
+			fakeGameRecordHandleClient);
 
-		await service.ExecuteAsync(command);
+		await sut.ExecuteAsync(command);
 
-		_ = fakeMessageSender
+		_ = fakeGameRecordHandleClient
 			.Received(1)
-			.PublishAsync(
-			subject: Arg.Is(Handle.Common.GameRecordHandleNatsConst.GameRecordHandleRequest),
-			data: Arg.Is(new Handle.Common.Protos.GameRecordHandleRequest
+			.HandleAsync(
+			source: Arg.Is(new Handle.Common.ViewModels.GameRecordHandleViewModel
 			{
-				GameProviderCode = gameRecordInfo.Value.GameProviderCode,
+				GameProviderCode = fakeGameRecordInfoOptions.Value.GameProviderCode,
 				PlayerCode = command.Record.PlayerCode,
 				ExternalRoundId = command.Record.ExternalRoundId,
 				ExternalBetId = command.Record.ExternalRoundId,
 				ExternalGameId = command.Record.ExternalGameId,
-				ExternalCreatedOn = command.Record.ExternalCreatedOn,
-				ExternalClosedOn = command.Record.ExternalClosedOn,
-				ExternalPayoffOn = command.Record.ExternalClosedOn,
-				ExternalResettleOn = DateTimeOffset.UnixEpoch.ToTimestamp(),
+				ExternalCreatedOn = command.Record.ExternalCreatedOn.ToDateTimeOffset(),
+				ExternalClosedOn = command.Record.ExternalClosedOn.ToDateTimeOffset(),
+				ExternalPayoffOn = command.Record.ExternalClosedOn.ToDateTimeOffset(),
+				ExternalResettleOn = DateTimeOffset.UnixEpoch,
 				BetState = Handle.Common.Protos.BetState.Loss,
 				BetType = Handle.Common.Protos.BetType.Normal,
 				FreeGameState = Handle.Common.Protos.FreeGameState.None,
@@ -89,7 +95,7 @@ public class HandleRecordCommandServiceUnitTest
 	public async Task Void()
 	{
 		var faceLogger = NullLogger<HandleRecordCommandService>.Instance;
-		var gameRecordInfo = Options.Create(new GameRecordInfoOptions
+		var fakeGameRecordInfoOptions = Options.Create(new GameRecordInfoOptions
 		{
 			GameProviderCode = "HABATF",
 			GameProviderConfiguration = "HABATFConfiguration",
@@ -99,7 +105,12 @@ public class HandleRecordCommandServiceUnitTest
 			IntervalMinutesMax = 60,
 			IntervalMinutesMinimum = 1
 		});
-		var fakeMessageSender = Substitute.For<IMessageSender>();
+		var fakePolicySettingsOptions = Options.Create(new PolicySettingsOptions
+		{
+			RetryCount = 1,
+			RetrySeconds = 1,
+		});
+		var fakeGameRecordHandleClient = Substitute.For<IGameRecordHandleClient>();
 
 		var command = new HandleRecordCommand(
 			new GameHistorySettled
@@ -118,28 +129,28 @@ public class HandleRecordCommandServiceUnitTest
 				AdditionalData = "{\"GameStateId\":4,\"FeatureCount\":0,\"BuyFeatureId\":0,\"PlayerId\":\"89dc452b-4637-ee11-b8f0-6045bd569110\",\"BrandId\":\"a452e523-8d40-ed11-a27c-00155db8f23b\",\"Username\":\"4ukop6pr8zj6\",\"BrandGameId\":\"01acc930-4978-4d9d-9b7d-7e961f6894ec\",\"GameKeyName\":\"SGMountMazuma\",\"GameTypeId\":11,\"DtStarted\":\"2023-08-10T06:26:08.01\",\"DtCompleted\":\"2023-08-10T06:26:08.037\",\"FriendlyGameInstanceId\":79003316977,\"GameInstanceId\":\"fcd07cc6-4637-ee11-b8f0-6045bd569110\",\"Stake\":0,\"Payout\":0,\"JackpotWin\":0.0,\"JackpotContribution\":0.0,\"CurrencyCode\":\"HKD\",\"ChannelTypeId\":4,\"BalanceAfter\":100.0}"
 			});
 
-		var service = new HandleRecordCommandService(
+		var sut = new HandleRecordCommandService(
 			faceLogger,
-			gameRecordInfo,
-			fakeMessageSender);
+			fakeGameRecordInfoOptions,
+			fakePolicySettingsOptions,
+			fakeGameRecordHandleClient);
 
-		await service.ExecuteAsync(command);
+		await sut.ExecuteAsync(command);
 
-		_ = fakeMessageSender
+		_ = fakeGameRecordHandleClient
 			.Received(1)
-			.PublishAsync(
-			subject: Arg.Is(Handle.Common.GameRecordHandleNatsConst.GameRecordHandleRequest),
-			data: Arg.Is(new Handle.Common.Protos.GameRecordHandleRequest
+			.HandleAsync(
+			source: Arg.Is(new Handle.Common.ViewModels.GameRecordHandleViewModel
 			{
-				GameProviderCode = gameRecordInfo.Value.GameProviderCode,
+				GameProviderCode = fakeGameRecordInfoOptions.Value.GameProviderCode,
 				PlayerCode = command.Record.PlayerCode,
 				ExternalRoundId = command.Record.ExternalRoundId,
 				ExternalBetId = command.Record.ExternalRoundId,
 				ExternalGameId = command.Record.ExternalGameId,
-				ExternalCreatedOn = command.Record.ExternalCreatedOn,
-				ExternalClosedOn = command.Record.ExternalClosedOn,
-				ExternalPayoffOn = command.Record.ExternalClosedOn,
-				ExternalResettleOn = DateTimeOffset.UnixEpoch.ToTimestamp(),
+				ExternalCreatedOn = command.Record.ExternalCreatedOn.ToDateTimeOffset(),
+				ExternalClosedOn = command.Record.ExternalClosedOn.ToDateTimeOffset(),
+				ExternalPayoffOn = command.Record.ExternalClosedOn.ToDateTimeOffset(),
+				ExternalResettleOn = DateTimeOffset.UnixEpoch,
 				BetState = Handle.Common.Protos.BetState.Void,
 				BetType = Handle.Common.Protos.BetType.Normal,
 				FreeGameState = Handle.Common.Protos.FreeGameState.None,
@@ -163,7 +174,7 @@ public class HandleRecordCommandServiceUnitTest
 	public async Task Win()
 	{
 		var faceLogger = NullLogger<HandleRecordCommandService>.Instance;
-		var gameRecordInfo = Options.Create(new GameRecordInfoOptions
+		var fakeGameRecordInfoOptions = Options.Create(new GameRecordInfoOptions
 		{
 			GameProviderCode = "HABATF",
 			GameProviderConfiguration = "HABATFConfiguration",
@@ -173,7 +184,12 @@ public class HandleRecordCommandServiceUnitTest
 			IntervalMinutesMax = 60,
 			IntervalMinutesMinimum = 1
 		});
-		var fakeMessageSender = Substitute.For<IMessageSender>();
+		var fakePolicySettingsOptions = Options.Create(new PolicySettingsOptions
+		{
+			RetryCount = 1,
+			RetrySeconds = 1,
+		});
+		var fakeGameRecordHandleClient = Substitute.For<IGameRecordHandleClient>();
 
 		var command = new HandleRecordCommand(
 			new GameHistorySettled
@@ -192,28 +208,28 @@ public class HandleRecordCommandServiceUnitTest
 				AdditionalData = "{\"GameStateId\":3,\"FeatureCount\":0,\"BuyFeatureId\":0,\"PlayerId\":\"89dc452b-4637-ee11-b8f0-6045bd569110\",\"BrandId\":\"a452e523-8d40-ed11-a27c-00155db8f23b\",\"Username\":\"4ukop6pr8zj6\",\"BrandGameId\":\"01acc930-4978-4d9d-9b7d-7e961f6894ec\",\"GameKeyName\":\"SGMountMazuma\",\"GameTypeId\":11,\"DtStarted\":\"2023-08-10T06:26:08.01\",\"DtCompleted\":\"2023-08-10T06:26:08.037\",\"FriendlyGameInstanceId\":79003316977,\"GameInstanceId\":\"fcd07cc6-4637-ee11-b8f0-6045bd569110\",\"Stake\":1.4,\"Payout\":14.0,\"JackpotWin\":0.0,\"JackpotContribution\":0.0,\"CurrencyCode\":\"HKD\",\"ChannelTypeId\":4,\"BalanceAfter\":100.0}"
 			});
 
-		var service = new HandleRecordCommandService(
+		var sut = new HandleRecordCommandService(
 			faceLogger,
-			gameRecordInfo,
-			fakeMessageSender);
+			fakeGameRecordInfoOptions,
+			fakePolicySettingsOptions,
+			fakeGameRecordHandleClient);
 
-		await service.ExecuteAsync(command);
+		await sut.ExecuteAsync(command);
 
-		_ = fakeMessageSender
+		_ = fakeGameRecordHandleClient
 			.Received(1)
-			.PublishAsync(
-			subject: Arg.Is(Handle.Common.GameRecordHandleNatsConst.GameRecordHandleRequest),
-			data: Arg.Is(new Handle.Common.Protos.GameRecordHandleRequest
+			.HandleAsync(
+			source: Arg.Is(new Handle.Common.ViewModels.GameRecordHandleViewModel
 			{
-				GameProviderCode = gameRecordInfo.Value.GameProviderCode,
+				GameProviderCode = fakeGameRecordInfoOptions.Value.GameProviderCode,
 				PlayerCode = command.Record.PlayerCode,
 				ExternalRoundId = command.Record.ExternalRoundId,
 				ExternalBetId = command.Record.ExternalRoundId,
 				ExternalGameId = command.Record.ExternalGameId,
-				ExternalCreatedOn = command.Record.ExternalCreatedOn,
-				ExternalClosedOn = command.Record.ExternalClosedOn,
-				ExternalPayoffOn = command.Record.ExternalClosedOn,
-				ExternalResettleOn = DateTimeOffset.UnixEpoch.ToTimestamp(),
+				ExternalCreatedOn = command.Record.ExternalCreatedOn.ToDateTimeOffset(),
+				ExternalClosedOn = command.Record.ExternalClosedOn.ToDateTimeOffset(),
+				ExternalPayoffOn = command.Record.ExternalClosedOn.ToDateTimeOffset(),
+				ExternalResettleOn = DateTimeOffset.UnixEpoch,
 				BetState = Handle.Common.Protos.BetState.Win,
 				BetType = Handle.Common.Protos.BetType.Normal,
 				FreeGameState = Handle.Common.Protos.FreeGameState.None,
